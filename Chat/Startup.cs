@@ -12,6 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
+
+using Chat.Services.Interfaces;
+using Chat.Services.Implementations;
 
 namespace Chat
 {
@@ -27,8 +31,15 @@ namespace Chat
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddControllers()
+            .AddNewtonsoftJson(options =>
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
             services.AddDbContextPool<MSSQLContext>(options =>
                                         options.UseSqlServer(Configuration.GetConnectionString("MSSQLConnectionString")));
+            services.AddScoped<IDataContext, MSSQLContext>();
+            services.AddScoped<IChatService, ChatService>();
+            services.AddScoped<IMessageService, MessageService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

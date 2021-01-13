@@ -4,14 +4,16 @@ using Chat.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Chat.Migrations
 {
     [DbContext(typeof(MSSQLContext))]
-    partial class MSSQLContextModelSnapshot : ModelSnapshot
+    [Migration("20210113114937_Added_Message_IsSystemMessage")]
+    partial class Added_Message_IsSystemMessage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

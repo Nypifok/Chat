@@ -16,5 +16,6 @@ namespace Chat.Data.Models
         public DateTime SendingTime { get; set; }
         public bool IsEdited { get; set; }
         public bool IsReaded { get; set; }
+        public bool IsSystemMessage { get; set; }
     }
 }
