@@ -1,4 +1,6 @@
 ﻿using Chat.Data.ContextConfigurations.MSSQLConfiguration;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Chat.Data.Models
 {
-    public class MSSQLContext:DbContext,IDataContext
+    public class MSSQLContext : IdentityDbContext<User,UserRole,Guid>, IDataContext 
     {
         public DbSet<Chat> Chats { get; set; }
         public DbSet<User> Users { get; set; }
@@ -20,7 +22,6 @@ namespace Chat.Data.Models
 
         public MSSQLContext(DbContextOptions<MSSQLContext> options) : base(options)
         {
-
         }
         protected MSSQLContext()
         {

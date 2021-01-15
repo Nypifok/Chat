@@ -75,7 +75,7 @@ namespace Chat.Services.Implementations
                 var chat = new Data.Models.Chat { ChatType = context.ChatTypes.Find("Dialog") };
 
                 await context.Chats.AddAsync(chat);
-                if (context.Users.Find(UserId) != null && context.Users.Find(UserId) != null)
+                if (context.Users.Find(UserId) != null && context.Users.Find(dto.TargetUserId) != null)
                 {
                     await context.ChatMembers.AddAsync(new ChatMember { ChatId = chat.Id, UserId = UserId, IsOwner = true });
                     await context.ChatMembers.AddAsync(new ChatMember { ChatId = chat.Id, UserId = dto.TargetUserId, IsOwner = true });

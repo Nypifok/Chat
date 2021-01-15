@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace Chat.Data.Models
 {
-    public class User
+    public class User:IdentityUser<Guid>
     {
-        public Guid Id { get; set; }
         public string Tag { get; set; }
         public string Name { get; set; }
         public IEnumerable<Message> Messages { get; set; }

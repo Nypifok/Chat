@@ -16,6 +16,9 @@ using Newtonsoft.Json.Serialization;
 
 using Chat.Services.Interfaces;
 using Chat.Services.Implementations;
+using Microsoft.AspNetCore.Identity;
+using Chat.Data.Authentication;
+using Chat.Middlewares;
 
 namespace Chat
 {
@@ -37,8 +40,13 @@ namespace Chat
             );
             services.AddDbContextPool<MSSQLContext>(options =>
                                         options.UseSqlServer(Configuration.GetConnectionString("MSSQLConnectionString")));
+            services.AddIdentity<User,UserRole>()
+                .AddEntityFrameworkStores<MSSQLContext>();
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
             services.AddScoped<IDataContext, MSSQLContext>();
             services.AddScoped<IChatService, ChatService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMessageService, MessageService>();
         }
 
@@ -52,8 +60,7 @@ namespace Chat
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseAuthorization();
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Chat.Data.Authorization;
 using Chat.Data.Dtos;
 using Chat.Data.Models;
 using Chat.Services.Interfaces;
@@ -12,6 +13,7 @@ namespace Chat.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class MessagesController : ControllerBase
     {
         private readonly IMessageService messageService;
@@ -23,7 +25,8 @@ namespace Chat.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult<Message>> SendMessage([FromBody] MessageSendingDto dto)
         {
-            var serviceSendMessage = await messageService.SendMessageAsync(dto, Guid.Parse("1b68d99c-e54f-475b-a6a1-5af89e0b388b"));
+            User usr = HttpContext.Items["User"] as User;
+            var serviceSendMessage = await messageService.SendMessageAsync(dto, usr.Id);
             if (serviceSendMessage.Success == false)
             {
                 return BadRequest(serviceSendMessage.Message);
@@ -33,7 +36,8 @@ namespace Chat.Controllers
         [HttpDelete("[action]")]
         public async Task<ActionResult<Message>> DeleteMessage([FromBody] MessageDeletingDto dto)
         {
-            var serviceDeleteMessage = await messageService.DeleteMessageAsync(dto, Guid.Parse("1b68d99c-e54f-475b-a6a1-5af89e0b388b"));
+            User usr = HttpContext.Items["User"] as User;
+            var serviceDeleteMessage = await messageService.DeleteMessageAsync(dto, usr.Id);
             if (serviceDeleteMessage.Success == false)
             {
                 return BadRequest(serviceDeleteMessage.Message);
@@ -43,7 +47,8 @@ namespace Chat.Controllers
         [HttpPut("[action]")]
         public async Task<ActionResult<Message>> EditMessage([FromBody] MessageEditingDto dto)
         {
-            var serviceEditMessage = await messageService.EditMessageAsync(dto, Guid.Parse("1b68d99c-e54f-475b-a6a1-5af89e0b388b"));
+            User usr = HttpContext.Items["User"] as User;
+            var serviceEditMessage = await messageService.EditMessageAsync(dto, usr.Id);
             if (serviceEditMessage.Success == false)
             {
                 return BadRequest(serviceEditMessage.Message);

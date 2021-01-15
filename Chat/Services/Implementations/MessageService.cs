@@ -17,7 +17,6 @@ namespace Chat.Services.Implementations
         }
         public async Task<ServiceResponse<Message>> DeleteMessageAsync(MessageDeletingDto dto, Guid UserId)
         {
-
             await context.BeginTransaction();
             try
             {

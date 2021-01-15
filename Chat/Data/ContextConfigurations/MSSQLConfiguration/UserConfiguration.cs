@@ -11,7 +11,6 @@ namespace Chat.Data.ContextConfigurations.MSSQLConfiguration
     {
         public UserConfiguration(EntityTypeBuilder<User> entityBuilder)
         {
-            entityBuilder.HasKey(u=>u.Id);
             entityBuilder.Property(u => u.Tag)
                 .HasMaxLength(20)
                 .IsRequired();
