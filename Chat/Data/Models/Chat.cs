@@ -13,10 +13,12 @@ namespace Chat.Data.Models
         public ChatType ChatType { get; set; }
         public IEnumerable<Message> Messages { get; set; }
         public IEnumerable<ChatMember> ChatMembers { get; set; }
+        public IEnumerable<ChatBot> ChatBots { get; set; }
         public Chat()
         {
             ChatMembers = new List<ChatMember>();
             Messages = new List<Message>();
+            ChatBots = new List<ChatBot>();
         }
     }
 }

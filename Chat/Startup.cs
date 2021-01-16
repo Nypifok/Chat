@@ -43,7 +43,7 @@ namespace Chat
             services.AddIdentity<User,UserRole>()
                 .AddEntityFrameworkStores<MSSQLContext>();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
-
+            services.AddSingleton<IBotNotificator, BotNotificator>();
             services.AddScoped<IDataContext, MSSQLContext>();
             services.AddScoped<IChatService, ChatService>();
             services.AddScoped<IUserService, UserService>();

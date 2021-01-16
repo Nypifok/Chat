@@ -13,6 +13,8 @@ namespace Chat.Data.Models
         DbSet<ChatType> ChatTypes { get; set; }
         DbSet<Message> Messages { get; set; }
         DbSet<ChatMember> ChatMembers { get; set; }
+        public DbSet<Bot> Bots { get; set; }
+        public DbSet<ChatBot> ChatBots { get; set; }
 
         Task BeginTransaction();
         Task Commit();

@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Chat.Extensions;
 namespace Chat.Services.Implementations
 {
     public class ChatService : IChatService
@@ -33,7 +33,7 @@ namespace Chat.Services.Implementations
                     inviteMessages.Add(new Message { IsSystemMessage = true, AuthorId = UserId, Chat_Id = dto.TargetChatId, SendingTime = DateTime.Now, TextContent = $"New member @{usr.Id}" });
                 }
                 await context.ChatMembers.AddRangeAsync(chatMembers);
-
+                
                 await context.Messages.AddRangeAsync(inviteMessages);
                 context.Commit();
                 return new ServiceResponse<IEnumerable<ChatMember>> { Data = chatMembers };
