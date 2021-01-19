@@ -19,6 +19,7 @@ using Chat.Services.Implementations;
 using Microsoft.AspNetCore.Identity;
 using Chat.Data.Authentication;
 using Chat.Middlewares;
+using Chat.Bots;
 
 namespace Chat
 {
@@ -48,6 +49,7 @@ namespace Chat
             services.AddScoped<IChatService, ChatService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IBotBuilder, BotBuilder>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

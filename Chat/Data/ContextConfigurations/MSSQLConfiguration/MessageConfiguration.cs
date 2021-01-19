@@ -16,7 +16,10 @@ namespace Chat.Data.ContextConfigurations.MSSQLConfiguration
             entityBuilder.HasOne(m => m.Author)
                 .WithMany(u => u.Messages)
                 .HasForeignKey(m => m.AuthorId)
-                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+            entityBuilder.HasOne(m => m.Bot)
+                .WithMany(u => u.Messages)
+                .HasForeignKey(m => m.BotId)
                 .OnDelete(DeleteBehavior.Cascade);
             entityBuilder.HasOne(m => m.Chat)
                 .WithMany(c => c.Messages)

@@ -1,4 +1,5 @@
-﻿using Chat.Data.Models;
+﻿using Chat.Bots;
+using Chat.Data.Models;
 using Chat.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,14 +10,14 @@ namespace Chat.Services.Implementations
 {
     public class BotNotificator : IBotNotificator
     {
-        private readonly IDataContext context;
-        public BotNotificator(IDataContext context)
+        private readonly IBotBuilder builder;
+        public BotNotificator(IBotBuilder builder)
         {
-            this.context = context;
+            this.builder = builder;
         }
         public async Task Notificate(Message message)
         {
-            context.ChatBots.Where(cb => cb.ChatId == message.Chat_Id);
+            builder.BuildBots(message);
         }
     }
 }

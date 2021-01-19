@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Chat.Data.Models
 {
-    public class MSSQLContext : IdentityDbContext<User,UserRole,Guid>, IDataContext 
+    public class MSSQLContext : IdentityDbContext<User,UserRole,Guid>, IDataContext
     {
         public DbSet<Chat> Chats { get; set; }
         public DbSet<ChatType> ChatTypes { get; set; }
@@ -20,6 +20,8 @@ namespace Chat.Data.Models
         public DbSet<ChatMember> ChatMembers { get; set; }
         public DbSet<Bot> Bots { get; set; }
         public DbSet<ChatBot> ChatBots { get; set; }
+        public DbSet<TypeOfBot> TypesOfBots { get ; set; }
+        public DbSet<BotType> BotTypes { get; set; }
 
         private IDbContextTransaction _transaction;
         private IBotNotificator botNotificator;
@@ -47,6 +49,8 @@ namespace Chat.Data.Models
             new ChatMemberConfiguration(builder.Entity<ChatMember>());
             new BotConfiguration(builder.Entity<Bot>());
             new ChatBotConfiguration(builder.Entity<ChatBot>());
+            new TypeOfBotConfiguration(builder.Entity<TypeOfBot>());
+            new BotTypeConfiguration(builder.Entity<BotType>());
         }
 
         public async Task BeginTransaction()
@@ -82,6 +86,7 @@ namespace Chat.Data.Models
             {
                 if (entityEntry.State == EntityState.Added)
                 {
+                    
                     botNotificator.Notificate(entityEntry.Entity);  
                 }
             }
