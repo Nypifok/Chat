@@ -9,12 +9,14 @@ namespace Chat.Bots
     public abstract class BotFunctionalityExtension : BaseBot
     {
         protected BaseBot baseBot { get; set; }
-        public BotFunctionalityExtension(Message message, IDataContext context,BaseBot bot) : base(message, context)
+        public BotFunctionalityExtension(BaseBot bot) : base(bot.BotId)
         {
             baseBot = bot ?? throw new ArgumentNullException(nameof(bot));
-            Message = bot.Message;
-            this.context = context;
+            BotId = bot.BotId;
         }
-
+        public override Task HandleMessage(Message message,IServiceProvider serviceProvider)
+        {
+            return baseBot.HandleMessage(message,serviceProvider);
+        }
     }
 }

@@ -32,6 +32,7 @@ namespace Chat
 
         public IConfiguration Configuration { get; }
 
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -39,9 +40,13 @@ namespace Chat
             .AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
-            services.AddDbContextPool<MSSQLContext>(options =>
-                                        options.UseSqlServer(Configuration.GetConnectionString("MSSQLConnectionString")));
-            services.AddIdentity<User,UserRole>()
+            services.AddEntityFrameworkSqlServer();
+            services.AddDbContextPool<MSSQLContext>((serviceProvider, options) =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("MSSQLConnectionString"));
+                options.UseInternalServiceProvider(serviceProvider);
+            });
+            services.AddIdentity<User, UserRole>()
                 .AddEntityFrameworkStores<MSSQLContext>();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddSingleton<IBotNotificator, BotNotificator>();
@@ -49,7 +54,8 @@ namespace Chat
             services.AddScoped<IChatService, ChatService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMessageService, MessageService>();
-            services.AddScoped<IBotBuilder, BotBuilder>();
+            services.AddSingleton<IBotBuilder, BotBuilder>();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -58,7 +64,7 @@ namespace Chat
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.ApplicationServices.GetService<IBotBuilder>();
             app.UseHttpsRedirection();
 
             app.UseRouting();

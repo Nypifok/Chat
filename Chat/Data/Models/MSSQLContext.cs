@@ -9,6 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using System.Threading;
 
 namespace Chat.Data.Models
 {
@@ -26,9 +29,9 @@ namespace Chat.Data.Models
         private IDbContextTransaction _transaction;
         private IBotNotificator botNotificator;
 
-        public MSSQLContext(DbContextOptions<MSSQLContext> options,IBotNotificator botNotificator) : base(options)
+        public MSSQLContext(DbContextOptions<MSSQLContext> options) : base(options)
         {
-            this.botNotificator = botNotificator;
+            botNotificator = this.GetInfrastructure().GetRequiredService<IBotNotificator>();
         }
         protected MSSQLContext()
         {
@@ -62,7 +65,7 @@ namespace Chat.Data.Models
         {
             try
             {
-                SaveChanges();
+                await SaveChangesAsync();
                 await _transaction.CommitAsync();
             }
             catch
@@ -80,7 +83,7 @@ namespace Chat.Data.Models
             await _transaction.RollbackAsync();
             await _transaction.DisposeAsync();
         }
-        public override int SaveChanges()
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             foreach (var entityEntry in ChangeTracker.Entries<Message>())
             {
@@ -94,7 +97,7 @@ namespace Chat.Data.Models
             try
             {
                 ChangeTracker.AutoDetectChangesEnabled = false;
-                return base.SaveChanges();
+                return await base.SaveChangesAsync();
             }
             finally
             {

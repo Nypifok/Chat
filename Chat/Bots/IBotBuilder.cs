@@ -1,4 +1,5 @@
 ﻿using Chat.Data.Models;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,5 @@ namespace Chat.Bots
 {
     public interface IBotBuilder
     {
-        void BuildBots(Message message);
     }
 }

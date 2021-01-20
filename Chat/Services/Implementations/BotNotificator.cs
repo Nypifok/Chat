@@ -10,14 +10,14 @@ namespace Chat.Services.Implementations
 {
     public class BotNotificator : IBotNotificator
     {
-        private readonly IBotBuilder builder;
-        public BotNotificator(IBotBuilder builder)
+
+        public event Action<Message> OnMessageSended;
+        public BotNotificator()
         {
-            this.builder = builder;
         }
         public async Task Notificate(Message message)
         {
-            builder.BuildBots(message);
+            OnMessageSended?.Invoke(message);
         }
     }
 }

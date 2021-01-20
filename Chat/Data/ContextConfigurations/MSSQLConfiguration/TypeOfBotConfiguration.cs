@@ -11,7 +11,6 @@ namespace Chat.Data.ContextConfigurations.MSSQLConfiguration
     {
         public TypeOfBotConfiguration(EntityTypeBuilder<TypeOfBot> entityBuilder)
         {
-            entityBuilder.Property(t => t.Title).HasMaxLength(30);
             entityBuilder.HasKey(t=>t.Title);
         }
     }

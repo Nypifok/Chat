@@ -18,7 +18,7 @@ namespace Chat.Data.ContextConfigurations.MSSQLConfiguration
                 .WithMany(tb => tb.BotTypes)
                 .HasForeignKey(bt => bt.TypeId);
 
-            entityBuilder.HasKey(bt=>new {bt.BotId,bt.TypeId });
+            entityBuilder.HasKey(bt=>bt.Id);
         }
     }
 }

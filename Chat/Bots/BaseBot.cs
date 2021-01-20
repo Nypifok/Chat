@@ -8,14 +8,11 @@ namespace Chat.Bots
 {
     public abstract class BaseBot
     {
-        public Message Message { get; protected set; }
-        protected IDataContext context { get; set; }
-        public BaseBot(Message message,IDataContext context)
+        public Guid BotId { get; set; }
+        public BaseBot(Guid botId)
         {
-            this.context = context;
-            if (Message == null) throw new ArgumentNullException(nameof(message));
-
-            Message = message;
+            BotId = botId;
         }
+        public abstract Task HandleMessage(Message message,IServiceProvider serviceProvider);
     }
 }

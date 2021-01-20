@@ -8,8 +8,13 @@ namespace Chat.Bots
 {
     public class StandartBot : BaseBot
     {
-        public StandartBot(Message message, IDataContext context) : base(message, context)
+        public StandartBot(Guid botId) : base(botId)
         {
+        }
+
+        public override Task HandleMessage(Message message,IServiceProvider serviceProvider)
+        {
+            throw new NotImplementedException();
         }
     }
 }

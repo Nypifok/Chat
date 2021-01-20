@@ -4,14 +4,16 @@ using Chat.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Chat.Migrations
 {
     [DbContext(typeof(MSSQLContext))]
-    partial class MSSQLContextModelSnapshot : ModelSnapshot
+    [Migration("20210120142236_AddedBotTypes")]
+    partial class AddedBotTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,19 +41,13 @@ namespace Chat.Migrations
 
             modelBuilder.Entity("Chat.Data.Models.BotType", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("BotId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TypeId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(30)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("BotId");
+                    b.HasKey("BotId", "TypeId");
 
                     b.HasIndex("TypeId");
 
@@ -181,7 +177,8 @@ namespace Chat.Migrations
             modelBuilder.Entity("Chat.Data.Models.TypeOfBot", b =>
                 {
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Title");
 
@@ -406,7 +403,9 @@ namespace Chat.Migrations
 
                     b.HasOne("Chat.Data.Models.TypeOfBot", "Type")
                         .WithMany("BotTypes")
-                        .HasForeignKey("TypeId");
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Bot");
 
