@@ -63,7 +63,7 @@ namespace Chat.Bots
             var context = scope.ServiceProvider.GetService<IDataContext>();
             await context.BeginTransaction();
             var botsId = context.ChatBots.Where(cb => cb.ChatId == message.Chat_Id).Select(cb => cb.BotId).ToList();
-            BuildAndNotificateBots(botsId, message);
+            await BuildAndNotificateBots(botsId, message);
             await context.Commit();
         }
 

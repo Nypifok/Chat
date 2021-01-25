@@ -55,6 +55,7 @@ namespace Chat
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMessageService, MessageService>();
             services.AddSingleton<IBotBuilder, BotBuilder>();
+            services.AddScoped<IBotService, BotService>();
             services.AddHttpClient();
 
         }
