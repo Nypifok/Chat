@@ -22,7 +22,7 @@ namespace Chat.Bots
 
 
 
-        public async Task BuildAndNotificateBots(IEnumerable<Guid> bots,Message message)
+        public async Task BuildAndNotificateBots(IEnumerable<Guid> bots, Message message)
         {
             using var scope = serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetService<IDataContext>();
@@ -31,7 +31,7 @@ namespace Chat.Bots
             var botsConfigurations = context.BotTypes.Where(bt => ids.Contains(bt.BotId)).ToList();
             foreach (Guid id in ids)
             {
-                if (BotsCollection.FirstOrDefault(b=>b.BotId==id) == null)
+                if (!BotsCollection.Any(b => b.BotId == id))
                 {
                     var types = botsConfigurations.Where(bc => bc.BotId == id).Select(bt => bt.TypeId).ToList();
 
@@ -40,25 +40,31 @@ namespace Chat.Bots
 
                     foreach (string str in types)
                     {
-
-                        bot = Activator.CreateInstance(Type.GetType(str, true), bot) as BaseBot;
-
+                        bot = Activator.CreateInstance(Type.GetType(str, true), bot,serviceProvider.GetService<IServiceProvider>()) as BaseBot;
                     }
                     BotsCollection.Add(bot);
                 }
 
             }
-            BotsCollection.Where(b => ids.Contains(b.BotId)).ToList().ForEach(b => b.HandleMessage(message,serviceProvider));
-            context.Commit();
+            if (message.IsSystemMessage)
+            {
+                BotsCollection.Where(b => ids.Contains(b.BotId)).ToList().ForEach(b => b.InvokeOnEventHappened(message));
+            }
+            else
+            {
+                BotsCollection.Where(b => ids.Contains(b.BotId)).ToList().ForEach(b => b.InvokeOnMessageSended(message));
+            }
+
+            await context.Commit();
         }
-        public async void OnMessageSendedEventHandler(Message message)
+        public async Task OnMessageSendedEventHandler(Message message)
         {
             using var scope = serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetService<IDataContext>();
             await context.BeginTransaction();
             var botsId = context.ChatBots.Where(cb => cb.ChatId == message.Chat_Id).Select(cb => cb.BotId).ToList();
-            BuildAndNotificateBots(botsId,message);
-            context.Commit();
+            BuildAndNotificateBots(botsId, message);
+            await context.Commit();
         }
 
     }

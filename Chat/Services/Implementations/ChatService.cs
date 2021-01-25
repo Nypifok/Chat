@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Chat.Extensions;
 namespace Chat.Services.Implementations
 {
     public class ChatService : IChatService
@@ -35,7 +34,7 @@ namespace Chat.Services.Implementations
                 await context.ChatMembers.AddRangeAsync(chatMembers);
                 
                 await context.Messages.AddRangeAsync(inviteMessages);
-                context.Commit();
+                await context.Commit();
                 return new ServiceResponse<IEnumerable<ChatMember>> { Data = chatMembers };
             }
             catch (Exception ex)
@@ -55,7 +54,7 @@ namespace Chat.Services.Implementations
 
                 await context.Chats.AddAsync(chat);
                 await context.ChatMembers.AddAsync(new ChatMember { ChatId = chat.Id, UserId = UserId, IsOwner = true });
-                context.Commit();
+                await context.Commit();
                 return new ServiceResponse<Data.Models.Chat> { Data = chat };
 
             }
@@ -80,7 +79,7 @@ namespace Chat.Services.Implementations
                     await context.ChatMembers.AddAsync(new ChatMember { ChatId = chat.Id, UserId = UserId, IsOwner = true });
                     await context.ChatMembers.AddAsync(new ChatMember { ChatId = chat.Id, UserId = dto.TargetUserId, IsOwner = true });
                 }
-                context.Commit();
+                await context.Commit();
                 return new ServiceResponse<Data.Models.Chat> { Data = chat };
 
             }
@@ -113,7 +112,7 @@ namespace Chat.Services.Implementations
                             removeMessages.Add(new Message { IsSystemMessage = true, AuthorId = UserId, Chat_Id = dto.TargetChatId, SendingTime = DateTime.Now, TextContent = $"@{member.UserId} was removed" });
                         }
                         await context.Messages.AddRangeAsync(removeMessages);
-                        context.Commit();
+                        await context.Commit();
                         return new ServiceResponse<IEnumerable<ChatMember>> { Data = members };
                     }
                 }

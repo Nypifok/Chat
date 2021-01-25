@@ -87,7 +87,7 @@ namespace Chat.Data.Models
         {
             foreach (var entityEntry in ChangeTracker.Entries<Message>())
             {
-                if (entityEntry.State == EntityState.Added)
+                if (entityEntry.State == EntityState.Added&&entityEntry.Entity.BotId==null)
                 {
                     
                     botNotificator.Notificate(entityEntry.Entity);  
@@ -96,12 +96,14 @@ namespace Chat.Data.Models
 
             try
             {
-                ChangeTracker.AutoDetectChangesEnabled = false;
                 return await base.SaveChangesAsync();
+            }
+            catch
+            {
+                throw;
             }
             finally
             {
-                ChangeTracker.AutoDetectChangesEnabled = true;
             }
         }
     }

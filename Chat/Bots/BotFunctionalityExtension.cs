@@ -14,9 +14,5 @@ namespace Chat.Bots
             baseBot = bot ?? throw new ArgumentNullException(nameof(bot));
             BotId = bot.BotId;
         }
-        public override Task HandleMessage(Message message,IServiceProvider serviceProvider)
-        {
-            return baseBot.HandleMessage(message,serviceProvider);
-        }
     }
 }

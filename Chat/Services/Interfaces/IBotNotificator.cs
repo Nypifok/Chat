@@ -9,6 +9,6 @@ namespace Chat.Services.Interfaces
     public interface IBotNotificator
     {
         Task Notificate(Message message);
-        event Action<Message> OnMessageSended;
+        event Func<Message,Task> OnMessageSended;
     }
 }

@@ -11,7 +11,7 @@ namespace Chat.Services.Implementations
     public class BotNotificator : IBotNotificator
     {
 
-        public event Action<Message> OnMessageSended;
+        public event Func<Message,Task> OnMessageSended;
         public BotNotificator()
         {
         }

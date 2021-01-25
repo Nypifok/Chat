@@ -9,10 +9,20 @@ namespace Chat.Bots
     public abstract class BaseBot
     {
         public Guid BotId { get; set; }
-        public BaseBot(Guid botId)
+        public event Func<Message,Task> OnMessageSended;
+        public event Func<Message, Task> OnEventHappened;
+        public BaseBot(Guid botId) 
         {
             BotId = botId;
+
         }
-        public abstract Task HandleMessage(Message message,IServiceProvider serviceProvider);
+        public async Task InvokeOnEventHappened(Message message)
+        {
+            OnEventHappened?.Invoke(message);
+        }
+        public async Task InvokeOnMessageSended(Message message)
+        {
+            OnMessageSended?.Invoke(message);
+        }
     }
 }

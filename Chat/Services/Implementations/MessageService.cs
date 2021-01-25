@@ -25,7 +25,7 @@ namespace Chat.Services.Implementations
                 if (message != null && await context.Users.FindAsync(UserId) != null && message.AuthorId == UserId)
                 {
                     context.Messages.Remove(message);
-                    context.Commit();
+                    await context.Commit();
                     return new ServiceResponse<Message> { Data = message };
                 }
                 context.Rollback();
@@ -50,7 +50,7 @@ namespace Chat.Services.Implementations
                     message.TextContent = dto.MessageContent;
                     message.IsEdited = true;
                     context.Messages.Update(message);
-                    context.Commit();
+                    await context.Commit();
                     return new ServiceResponse<Message> { Data = message };
                 }
                 context.Rollback();
@@ -81,7 +81,7 @@ namespace Chat.Services.Implementations
                 {
                     var message = new Message { SendingTime = DateTime.Now, TextContent = dto.MessageContent, AuthorId = UserId, Chat_Id = dto.ChatId };
                     await context.Messages.AddAsync(message);
-                    context.Commit();
+                    await context.Commit();
                     return new ServiceResponse<Message> { Data = message };
                 }
                 context.Rollback();

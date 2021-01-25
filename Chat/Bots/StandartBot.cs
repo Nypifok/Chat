@@ -11,10 +11,5 @@ namespace Chat.Bots
         public StandartBot(Guid botId) : base(botId)
         {
         }
-
-        public override Task HandleMessage(Message message,IServiceProvider serviceProvider)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
