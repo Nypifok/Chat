@@ -17,7 +17,7 @@ namespace Chat.Services.Implementations
         }
         public async Task Notificate(Message message)
         {
-            OnMessageSended?.Invoke(message);
+            OnMessageSended?.Invoke(message).Start();
         }
     }
 }

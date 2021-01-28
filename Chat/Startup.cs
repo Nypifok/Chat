@@ -20,6 +20,9 @@ using Microsoft.AspNetCore.Identity;
 using Chat.Data.Authentication;
 using Chat.Middlewares;
 using Chat.Bots;
+using Chat.Services.Interfaces.RabbitMQ;
+using Chat.Services.Implementations.RabbitMQ;
+using Chat.Data;
 
 namespace Chat
 {
@@ -57,7 +60,8 @@ namespace Chat
             services.AddSingleton<IBotBuilder, BotBuilder>();
             services.AddScoped<IBotService, BotService>();
             services.AddHttpClient();
-
+            services.Configure<RabbitMqConfiguration>(Configuration.GetSection("RabbitMq"));
+            services.AddTransient<IQueueMessageSender, QueueMessageSender>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
